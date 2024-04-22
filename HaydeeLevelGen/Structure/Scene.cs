@@ -1,10 +1,12 @@
-﻿namespace HaydeeLevelGen.Structure;
+﻿using HaydeeLevelGen.Structure.Flooring;
+using HaydeeLevelGen.Structure.Walls;
+
+namespace HaydeeLevelGen.Structure;
 
 /// <summary>
 /// Describes a scene in the Edith Haydee level editor. This is the top level entity.
 /// </summary>
-public class Scene
-{
+public class Scene {
     private readonly int _ceilingHeight;
     private readonly List<Wall> _walls;
     private readonly Floor _floor;
@@ -17,11 +19,10 @@ public class Scene
     /// <param name="doorString"></param>
     /// <param name="name"></param>
     /// <param name="ceilingHeight"></param>
-    public Scene(string wallString, string doorString, string name, int ceilingHeight = 11)
-    {
+    public Scene(string wallString, string doorString, string name, int ceilingHeight = 11) {
         this._name = name;
         this._ceilingHeight = ceilingHeight;
-        
+
         this._walls = Wall.GenerateWallsFromDescriptors(wallString, doorString);
         this._floor = Floor.GenerateFloorFromWalls(this._walls);
     }
