@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Dynamic;
+using System.Text;
 
 namespace HaydeeLevelGen.Generation.FileEntries;
 
@@ -31,6 +32,28 @@ internal class BaseFileEntry {
     }
 
     /// <summary>
+    /// Puts the default location parameters into the parameter map of this BaseFileEntry.
+    /// Initial position will be (0,0,0).
+    /// </summary>
+    protected void PutDefaultLocalsParameters() {
+        PutParameter(ParamRotationX, "1.0 0.0 0.0");
+        PutParameter(ParamRotationY, "0.0 1.0 0.0");
+        PutParameter(ParamRotationZ, "0.0 0.0 1.0");
+        PutParameter(ParamLocation, "0.0 0.0 0.0");
+    }
+
+    /// <summary>
+    /// Puts the default freeze parameters for this BaseFileEntry.
+    /// Initial freeze position will be (0,0,0).
+    /// </summary>
+    protected void PutDefaultFreezeParameters() {
+        PutParameter("freezex", "1.0 0.0 0.0");
+        PutParameter("freezey", "0.0 1.0 0.0");
+        PutParameter("freezez", "0.0 0.0 1.0");
+        PutParameter("freezew", "0.0 0.0 0.0");
+    }
+
+    /// <summary>
     /// Put a parameter into this entry.
     /// If the parameter already exists, it is overwritten.
     /// </summary>
@@ -45,6 +68,13 @@ internal class BaseFileEntry {
         foreach (BaseFileEntry entry in newEntries) {
             this._subEntries.Add(entry);
         }
+    }
+    
+    /// <summary>
+    /// Adds one additional sub-entry to be evaluated upon string generation.
+    /// </summary>
+    internal void AddSubEntry(BaseFileEntry newEntry) {
+        AddSubEntries(newEntry);
     }
 
     /// <summary>
