@@ -38,14 +38,11 @@ internal class Wall {
         _upcomingCornerType = upcomingCornerType;
         _doors = doors;
 
-        switch (_orientation) {
-            case Front:
-                _globalPos = _pos - Z(length); break;
-            case Left:
-                _globalPos = _pos - X(length); break;
-            default:
-                _globalPos = _pos; break;
-        }
+        _globalPos = _orientation switch {
+            Front => _pos - Z(length),
+            Left => _pos - X(length),
+            _ => _pos
+        };
 
         _doorsGlobalPos =
             _doors.Select(
@@ -126,42 +123,30 @@ internal class Wall {
         }
         return result;
     }
-    
-    private WallCornerType GetGlobalLastCornerType() {
-        switch (_orientation) {
-            case Front: case Left: return _upcomingCornerType;
-            case Back: case Right: default: return _originCornerType;
-        };
-    }
 
-    private WallCornerType GetGlobalUpcomingCornerType() {
-        switch (_orientation) {
-            case Front: case Left: return _originCornerType;
-            case Back: case Right: default: return _upcomingCornerType;
-        };
-    }
+    private WallCornerType GetGlobalLastCornerType() => _orientation switch {
+        Front or Left => _upcomingCornerType,
+        Back or Right => _originCornerType,
+        _ => _originCornerType
+    };
 
-    private static WallCornerType GetCornerTypeXToZ(int x, int z) {
-        switch (x) {
-            case > 0 when z < 0:
-                return Outer;
-            case > 0 when z > 0:
-            case < 0 when z < 0:
-                return Inner;
-            default:
-                return Outer;
-        }
-    }
-    
-    private static WallCornerType GetCornerTypeZToX(int z, int x) {
-        switch (z) {
-            case > 0 when x < 0:
-                return Inner;
-            case > 0 when x > 0:
-            case < 0 when x < 0:
-                return Outer;
-            default:
-                return Inner;
-        }
-    }
+    private WallCornerType GetGlobalUpcomingCornerType() => _orientation switch {
+        Front or Left => _originCornerType,
+        Back or Right => _upcomingCornerType,
+        _ => _upcomingCornerType
+    };
+
+    private static WallCornerType GetCornerTypeXToZ(int x, int z) => x switch {
+        > 0 when z < 0 => Outer,
+        > 0 when z > 0 => Inner,
+        < 0 when z < 0 => Inner,
+        _ => Outer
+    };
+
+    private static WallCornerType GetCornerTypeZToX(int z, int x) => z switch {
+        > 0 when x < 0 => Inner,
+        > 0 when x > 0 => Outer,
+        < 0 when x < 0 => Outer,
+        _ => Inner
+    };
 }

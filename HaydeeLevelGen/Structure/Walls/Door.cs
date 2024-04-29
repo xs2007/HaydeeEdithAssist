@@ -39,7 +39,7 @@ internal class Door {
     }
 
     internal int GetHeight() {
-        return this._crouch ? HeightCrouch : HeightFull;
+        return _crouch ? HeightCrouch : HeightFull;
     }
 
     internal Door CopyWithNewPosition(int position) {
