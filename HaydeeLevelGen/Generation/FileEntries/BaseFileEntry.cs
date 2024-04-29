@@ -15,6 +15,11 @@ internal class BaseFileEntry {
     internal const string ParamRotationY = "localy";
     internal const string ParamRotationZ = "localz";
     internal const string ParamLocation = "localw";
+
+    private const string FreezeX = "freezex";
+    private const string FreezeY = "freezey";
+    private const string FreezeZ = "freezez";
+    private const string FreezeW = "freezew";
     
     private readonly string _name;
     private readonly Dictionary<string, string> _parameters;
@@ -26,9 +31,9 @@ internal class BaseFileEntry {
     /// </summary>
     /// <param name="name"></param>
     internal BaseFileEntry(string name) {
-        this._name = name;
-        this._parameters = new Dictionary<string, string>();
-        this._subEntries = new List<BaseFileEntry>();
+        _name = name;
+        _parameters = new Dictionary<string, string>();
+        _subEntries = new List<BaseFileEntry>();
     }
 
     /// <summary>
@@ -47,10 +52,10 @@ internal class BaseFileEntry {
     /// Initial freeze position will be (0,0,0).
     /// </summary>
     protected void PutDefaultFreezeParameters() {
-        PutParameter("freezex", "1.0 0.0 0.0");
-        PutParameter("freezey", "0.0 1.0 0.0");
-        PutParameter("freezez", "0.0 0.0 1.0");
-        PutParameter("freezew", "0.0 0.0 0.0");
+        PutParameter(FreezeX, "1.0 0.0 0.0");
+        PutParameter(FreezeY, "0.0 1.0 0.0");
+        PutParameter(FreezeZ, "0.0 0.0 1.0");
+        PutParameter(FreezeW, "0.0 0.0 0.0");
     }
 
     /// <summary>
@@ -58,7 +63,7 @@ internal class BaseFileEntry {
     /// If the parameter already exists, it is overwritten.
     /// </summary>
     internal void PutParameter(string key, string value) {
-        this._parameters[key] = value;
+        _parameters[key] = value;
     }
 
     /// <summary>
@@ -66,7 +71,7 @@ internal class BaseFileEntry {
     /// </summary>
     internal void AddSubEntries(params BaseFileEntry[] newEntries) {
         foreach (BaseFileEntry entry in newEntries) {
-            this._subEntries.Add(entry);
+            _subEntries.Add(entry);
         }
     }
     
@@ -82,13 +87,13 @@ internal class BaseFileEntry {
     /// and append the string representation of all contents in this BaseFileEntry to it.
     /// </summary>
     internal void AppendStringRepresentation(StringBuilder sb, int indent = 0) {
-        AppendLineWithIndent(sb, indent, this._name);
+        AppendLineWithIndent(sb, indent, _name);
         AppendLineWithIndent(sb, indent, "{");
+        
+        foreach ((string key, string value) in _parameters)
+            AppendLineWithIndent(sb, indent + 1, ToParamContentString(key, value));
 
-        foreach (KeyValuePair<string, string> param in this._parameters)
-            AppendLineWithIndent(sb, indent + 1, ToParamContentString(param));
-
-        foreach (BaseFileEntry entry in this._subEntries)
+        foreach (BaseFileEntry entry in _subEntries)
             entry.AppendStringRepresentation(sb, indent + 1);
 
         AppendLineWithIndent(sb, indent, "}");
@@ -99,7 +104,7 @@ internal class BaseFileEntry {
         sb.AppendLine(content);
     }
 
-    private static string ToParamContentString(KeyValuePair<string, string> entry) {
-        return entry.Value != "" ? $"{entry.Key} {entry.Value};" : $"{entry.Key};";
+    private static string ToParamContentString(string key, string value) {
+        return value != "" ? $"{key} {value};" : $"{key};";
     }
 }

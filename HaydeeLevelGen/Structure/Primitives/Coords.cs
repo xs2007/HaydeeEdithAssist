@@ -16,6 +16,14 @@ internal record Coords(int ValX, int ValY, int ValZ) {
     public static Coords operator +(Coords first, Coords second) {
         return new Coords(first.ValX + second.ValX, first.ValY + second.ValY, first.ValZ + second.ValZ);
     }
+    
+    /// <summary>
+    /// Subtracts the values of the second coordinate from the first
+    /// and returns a new Coords object with the respective sums in each dimension.
+    /// </summary>
+    public static Coords operator -(Coords first, Coords second) {
+        return new Coords(first.ValX - second.ValX, first.ValY - second.ValY, first.ValZ - second.ValZ);
+    }
 
     /// <summary>
     /// Scales all dimensions uniformly with the given fixed scale.

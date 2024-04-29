@@ -20,10 +20,10 @@ public class Scene {
     /// <param name="name"></param>
     /// <param name="ceilingHeight"></param>
     public Scene(string wallString, string doorString, string name, int ceilingHeight = 11) {
-        this._name = name;
-        this._ceilingHeight = ceilingHeight;
+        _name = name;
+        _ceilingHeight = ceilingHeight;
 
-        this._walls = Wall.GenerateWallsFromDescriptors(wallString, doorString);
-        this._floor = Floor.GenerateFloorFromWalls(this._walls);
+        _walls = Wall.GenerateWallsFromDescriptors(wallString, doorString);
+        _floor = Floor.GenerateFloorFromWalls(_walls);
     }
 }
